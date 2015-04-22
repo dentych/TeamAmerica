@@ -1,6 +1,6 @@
 #include "../inc/UART.h"
 
-UART::UART(char *device, int baudRate) {
+UART::UART(const char *device, int baudRate) {
 	fd = serialOpen(device, baudRate);
 
 	if (fd < 0) {
