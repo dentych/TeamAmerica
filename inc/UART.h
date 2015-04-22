@@ -3,7 +3,7 @@
 
 #include <wiringSerial.h>
 #include <string>
-#include "Log.h"
+//#include "Log.h"
 
 class UART {
 	public:
