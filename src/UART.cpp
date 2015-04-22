@@ -14,8 +14,10 @@ UART::~UART() {
 	}
 }
 
-void UART::send(char data[], int bytes) {
-	// SEND SHIT
+void UART::send(std::string data, int bytes) {
+	for (int i = 0; i < bytes; i++) {
+		serialPutchar(fd, data[i]);
+	}
 }
 
 std::string UART::receive(int bytes) {

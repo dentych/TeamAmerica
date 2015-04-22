@@ -9,7 +9,7 @@ class UART {
 	public:
 		UART(char *device, int baudRate);
 		~UART();
-		void send(char data[], int bytes);
+		void send(std::string data, int bytes);
 		std::string receive(int bytes);
 
 	private:
