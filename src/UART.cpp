@@ -5,6 +5,7 @@ UART::UART(char *device, int baudRate) {
 
 	if (fd < 0) {
 		//log.writeLog(Log::uart);
+		std::cout << "Can't connect to UART device." << std::endl;
 	}
 }
 
