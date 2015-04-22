@@ -4,7 +4,7 @@ UART::UART(char *device, int baudRate) {
 	fd = serialOpen(device, baudRate);
 
 	if (fd < 0) {
-		log.writeLog(Log::uart);
+		//log.writeLog(Log::uart);
 	}
 }
 
