@@ -4,3 +4,6 @@ Things ready to be worked on:
 
 In progress:
 [![Stories in In Progress](https://badge.waffle.io/dentych/TeamAmerica.png?label=In%20Progress&title=In%20Progress)](https://waffle.io/dentych/TeamAmerica)
+
+Need review:
+[![Stories in Need review](https://badge.waffle.io/dentych/TeamAmerica.png?label=Need%20Review&title=Need%20Review)](https://waffle.io/dentych/TeamAmerica)
