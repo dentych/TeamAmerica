@@ -7,6 +7,7 @@ class Protocol
 {
 public:
 	Protocol();
+	~Protocol();
 	enum CMDS {
 		CMD_FULLSTOP,
 		CMD_UP,

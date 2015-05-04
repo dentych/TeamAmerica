@@ -14,6 +14,10 @@ Protocol::Protocol(){
 	cmdArray[CMD_RESET] = 'R';
 }
 
+Protocol::~Protocol() {
+	delete cmdArray;
+}
+
 string Protocol::constructString(CMDS command, char option) {
 	string out;
 	out.push_back('1');
