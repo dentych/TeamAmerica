@@ -20,7 +20,3 @@ void UART::send(std::string data, int bytes) {
 		serialPutchar(fd, data[i]);
 	}
 }
-
-std::string UART::receive(int bytes) {
-	// MODTAG SHIT
-}

@@ -11,7 +11,6 @@ class UART {
 		UART(const char *device, int baudRate);
 		~UART();
 		void send(std::string data, int bytes);
-		std::string receive(int bytes);
 
 	private:
 		int fd;
