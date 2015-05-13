@@ -1,8 +1,4 @@
 #include "login.h"
-#include <Qstring>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include "camerafeed.h"
 
 
 Login::Login(MatrixKeyboard *keyboard, QWidget *parent)

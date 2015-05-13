@@ -16,6 +16,11 @@ ofstream file;
 cameraFeed::cameraFeed(MatrixKeyboard *keyboard, QWidget *parent)
     : keyboard(keyboard), QWidget(parent)
 {
+    capture = 0;
+    feed_ = new QLabel();
+    msg_ = new QLabel();
+    text_ = new QLabel();
+    sstat_ = new QLabel();
 
     timer_ = new QTimer(this);
 

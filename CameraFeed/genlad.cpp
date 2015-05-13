@@ -51,7 +51,7 @@ void Genlad::OnOkPressed()
         temp+=digit;
     }
 
-    skud_+=temp;
+    skud_ = temp;
 
     //info_->setText(QString::number(skud_));
 

@@ -13,33 +13,36 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         camerafeed.cpp\
-login.cpp \
-    genlad.cpp
+		login.cpp \
+    	genlad.cpp \
+		../Matrix/MatrixKeyboard.cpp
 
 HEADERS  += camerafeed.h\
-login.h \
-    genlad.h
+			login.h \
+			genlad.h \
+			../Matrix/MatrixKeyboard.h
 
-INCLUDEPATH += C:/opencv/build/include
+INCLUDEPATH += /home/pi/projekt
 #INCLUDEPATH += C:/Users/andreas/Documents/skole/PRJ3/Login_Qt4
 
-LIBS += -LC:/opencv/build/x64/vc12/lib \
- -lopencv_calib3d2410 \
- -lopencv_contrib2410 \
- -lopencv_core2410 \
- -lopencv_features2d2410 \
- -lopencv_flann2410 \
- -lopencv_gpu2410 \
- -lopencv_highgui2410 \
- -lopencv_imgproc2410 \
- -lopencv_legacy2410 \
- -lopencv_ml2410 \
- -lopencv_nonfree2410 \
- -lopencv_objdetect2410 \
- -lopencv_ocl2410 \
- -lopencv_photo2410 \
- -lopencv_stitching2410 \
- -lopencv_superres2410 \
- -lopencv_ts2410 \
- -lopencv_video2410 \
- -lopencv_videostab2410
+LIBS += -L/usr/local/lib \
+ -lopencv_calib3d \
+ -lopencv_contrib \
+ -lopencv_core \
+ -lopencv_features2d \
+ -lopencv_flann \
+ -lopencv_gpu \
+ -lopencv_highgui \
+ -lopencv_imgproc \
+ -lopencv_legacy \
+ -lopencv_ml \
+ -lopencv_nonfree \
+ -lopencv_objdetect \
+ -lopencv_ocl \
+ -lopencv_photo \
+ -lopencv_stitching \
+ -lopencv_superres \
+ #-lopencv_ts \
+ -lopencv_video \
+ -lopencv_videostab \
+ -lwiringPi

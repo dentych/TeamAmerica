@@ -5,17 +5,20 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QLineEdit>
-#include <Qstring>
+#include <QString>
 #include <QEvent>
 #include <QKeyEvent>
-#include "MatrixKeyboard.h"
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include "../Matrix/MatrixKeyboard.h"
+#include "camerafeed.h"
 
 class Login : public QWidget
 {
     Q_OBJECT
 
 public:
-    Login(QWidget *parent = 0);
+    Login(MatrixKeyboard *keyboard = NULL, QWidget *parent = 0);
     ~Login();
 private slots:
     void OnLogIndPressed();

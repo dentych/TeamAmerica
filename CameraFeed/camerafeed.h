@@ -11,7 +11,7 @@
 #include <QTimer>
 #include <QDialog>
 #include <fstream>
-#include "MatrixKeyboard.h"
+#include "../Matrix/MatrixKeyboard.h"
 
 using namespace cv;
 
@@ -48,11 +48,11 @@ private:
 
     //QPushButton *start_;
     //QPushButton *slut_;
-    CvCapture* capture = 0;
-    QLabel *feed_ = new QLabel();
-    QLabel *msg_ = new QLabel();
-    QLabel *text_ = new QLabel();
-    QLabel *sstat_ = new QLabel();
+    CvCapture* capture;
+    QLabel *feed_;
+    QLabel *msg_;
+    QLabel *text_;
+    QLabel *sstat_;
     QTimer *timer_;
 
     MatrixKeyboard *keyboard;
