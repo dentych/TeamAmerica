@@ -1,6 +1,6 @@
 #include "MatrixKeyboard.h"
 
-MatrixKeyboard::MatrixKeyboard() {
+MatrixKeyboard::MatrixKeyboard(QObject *target) : target(target) {
 	std::cout << "Constructing keyboard object." << std::endl;
 	wiringPiSetupGpio();
 
@@ -34,13 +34,14 @@ MatrixKeyboard::MatrixKeyboard() {
 	mk_columns[3] = MK1_7;
 
 	// Create array of the matrix chars
-	matrixChars[0] = "123A";
+    matrixChars[0] = "123A";
 	matrixChars[1] = "456B";
 	matrixChars[2] = "789C";
-	matrixChars[3] = "*0#D";
+    matrixChars[3] = "*0#D";
 }
 
 void MatrixKeyboard::poll() {
+	std::cout << "Polling!" << std::endl;
 	int row, column;
 	int previousRead[2];
 	bool dirtyBit = false;
@@ -61,6 +62,9 @@ void MatrixKeyboard::poll() {
 					dirtyBit = true;
 					if (previousRead[0] != row || previousRead[1] != column) {
 						std::cout << "Read: " << findMatrixChar(row, column) << std::endl;
+						char read_char = findMatrixChar(row, column);
+                        QKeyEvent *event = new QKeyEvent(QEvent::KeyPress, findQtKey(read_char), Qt::NoModifier, (QString)read_char);
+                        QApplication::postEvent(target, event);
 					}
 					previousRead[0] = row;
 					previousRead[1] = column;
@@ -74,4 +78,66 @@ void MatrixKeyboard::poll() {
 
 char MatrixKeyboard::findMatrixChar(int row, int column) {
 	return matrixChars[row][column];
+}
+
+void MatrixKeyboard::run() {
+    poll();
+}
+
+int MatrixKeyboard::findQtKey(char key) {
+    switch (key) {
+    case '0':
+        return Qt::Key_0;
+        break;
+    case '1':
+        return Qt::Key_1;
+        break;
+    case '2':
+        return Qt::Key_2;
+        break;
+    case '3':
+        return Qt::Key_3;
+        break;
+    case '4':
+        return Qt::Key_4;
+        break;
+    case '5':
+        return Qt::Key_5;
+        break;
+    case '6':
+        return Qt::Key_6;
+        break;
+    case '7':
+        return Qt::Key_7;
+        break;
+    case '8':
+        return Qt::Key_8;
+        break;
+    case '9':
+        return Qt::Key_9;
+        break;
+    case 'A':
+        return Qt::Key_A;
+        break;
+    case 'B':
+        return Qt::Key_B;
+        break;
+    case 'C':
+        return Qt::Key_C;
+        break;
+    case 'D':
+        return Qt::Key_D;
+        break;
+    case '*':
+        return Qt::Key_Asterisk;
+        break;
+    case '#':
+        return Qt::Key_NumberSign;
+        break;
+    }
+}
+
+void MatrixKeyboard::setTarget(QObject *target) {
+	std::cout << "Setting new target." << std::endl;
+    this->target = target;
 }
