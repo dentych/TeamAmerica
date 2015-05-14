@@ -13,8 +13,8 @@ using namespace cv;
 extern int skud_;
 ofstream file;
 
-cameraFeed::cameraFeed(QWidget *parent)
-    : QWidget(parent)
+cameraFeed::cameraFeed(MatrixKeyboard *keyboard, QWidget *parent)
+    : keyboard(keyboard), QWidget(parent)
 {
 
     timer_ = new QTimer(this);
@@ -27,11 +27,11 @@ cameraFeed::cameraFeed(QWidget *parent)
     QVBoxLayout *vbox = new QVBoxLayout();
     QVBoxLayout *vbox2 = new QVBoxLayout();
 
-    aktiver_ = new QPushButton("Aktiver");
-    deaktiver_ = new QPushButton("Deaktiver");
-    genlad_ = new QPushButton("Genlad");
-    advarsel_ = new QPushButton("Advarsel");
-    logud_ = new QPushButton("Log ud");
+    aktiver_ = new QPushButton("1: Aktiver");
+    deaktiver_ = new QPushButton("2: Deaktiver");
+    genlad_ = new QPushButton("3: Genlad");
+    advarsel_ = new QPushButton("4: Advarsel");
+    logud_ = new QPushButton("5: Log ud");
 
     connect(aktiver_, SIGNAL(pressed()), this, SLOT(OnAktiverPressed()));
     connect(deaktiver_, SIGNAL(pressed()), this, SLOT(OnDeaktiverPressed()));
@@ -166,7 +166,7 @@ void cameraFeed::OnAdvarselPressed()
 
 void cameraFeed::OnLogUdPressed()
 {
-    Login *log = new Login;
+    Login *log = new Login(keyboard);
     log->setFixedSize(500,300);
     log->setWindowTitle("Login");
     log->show();
@@ -190,6 +190,27 @@ void cameraFeed::Onslutpressed()
     feed_->hide();
 }
 */
+
+void cameraFeed::keyPressEvent(QKeyEvent *k) {
+    switch (k->key()) {
+            case Qt::Key_1:
+                OnAktiverPressed();
+                break;
+            case Qt::Key_2:
+                OnDeaktiverPressed();
+                break;
+            case Qt::Key_3:
+                OnGenladPressed();
+                break;
+            case Qt::Key_4:
+                OnAdvarselPressed();
+                break;
+            case Qt::Key_5:
+                OnLogUdPressed();
+            default:
+                break;
+    }
+}
 
 cameraFeed::~cameraFeed()
 {

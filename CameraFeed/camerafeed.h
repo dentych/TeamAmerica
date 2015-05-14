@@ -11,6 +11,7 @@
 #include <QTimer>
 #include <QDialog>
 #include <fstream>
+#include "MatrixKeyboard.h"
 
 using namespace cv;
 
@@ -19,7 +20,7 @@ class cameraFeed : public QWidget
     Q_OBJECT
 
 public:
-    cameraFeed(QWidget *parent = 0);
+    cameraFeed(MatrixKeyboard *keyboard, QWidget *parent = 0);
     ~cameraFeed();
     QImage putImage(const Mat& mat);
 
@@ -34,6 +35,9 @@ private slots:
     void OnLogUdPressed();
 
     void updatePicture();
+
+protected:
+    void keyPressEvent(QKeyEvent *k);
 
 private:
     QPushButton *aktiver_;
@@ -50,6 +54,8 @@ private:
     QLabel *text_ = new QLabel();
     QLabel *sstat_ = new QLabel();
     QTimer *timer_;
+
+    MatricKeyboard *keyboard;
 
 };
 

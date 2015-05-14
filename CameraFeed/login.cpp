@@ -5,9 +5,12 @@
 #include "camerafeed.h"
 
 
-Login::Login(QWidget *parent)
-    : QWidget(parent)
+Login::Login(MatrixKeyboard *keyboard, QWidget *parent)
+    : keyboard(keyboard), QWidget(parent)
 {
+     le1 = new QLineEdit(this);
+     password_ = "1905";
+     status_ = new QLabel();
 
      QVBoxLayout *vbox = new QVBoxLayout(this);
      QHBoxLayout *hbox = new QHBoxLayout();
@@ -32,8 +35,15 @@ Login::Login(QWidget *parent)
      vbox->addWidget(login_,0,Qt::AlignCenter);
      vbox->addWidget(status_,0,Qt::AlignCenter);
      vbox->addStretch(1);
-}
 
+     if (keyboard == NULL) {
+        this->keyboard = new MatrixKeyboard(this);
+        this->keyboard->start();
+     }
+     else {
+         this->keyboard->setTarget(this);
+     }
+}
 void Login::OnLogIndPressed()
 {
 
@@ -42,7 +52,7 @@ void Login::OnLogIndPressed()
 
      //status_->setText("Kode korrekt!!");
 
-     cameraFeed *cam = new cameraFeed;
+     cameraFeed *cam = new cameraFeed(keyboard);
      cam->setAttribute(Qt::WA_DeleteOnClose);
      cam->show();
 
@@ -52,6 +62,21 @@ void Login::OnLogIndPressed()
      else
      status_->setText("<font color='red'>Forkert kode, prøv igen..</font>");
 }
+
+void Login::keyPressEvent(QKeyEvent *k) {
+    switch (k->key()) {
+    case Qt::Key_Asterisk:
+        le1->backspace();
+        break;
+    case Qt::Key_NumberSign:
+        OnLogIndPressed();
+        break;
+    default:
+        le1->insert(k->text());
+        break;
+    }
+}
+
 Login::~Login()
 {
 
