@@ -91,6 +91,7 @@ cameraFeed::cameraFeed(MatrixKeyboard *keyboard, QWidget *parent)
     cout << "No camera detected" << endl;
     }
 
+	this->keyboard->setTarget(this);
 }
 
 void cameraFeed::updatePicture()
