@@ -16,7 +16,8 @@ public:
 		CMD_RIGHT,
 		CMD_SHOOT,
 		CMD_RESET,
-		CMD_ALARM
+		CMD_ALARM,
+		CMD_LASER
 	};
 
 	string constructString(CMDS command, char option);
