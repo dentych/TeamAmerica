@@ -55,7 +55,7 @@ private:
     QLabel *sstat_ = new QLabel();
     QTimer *timer_;
 
-    MatricKeyboard *keyboard;
+    MatrixKeyboard *keyboard;
 
 };
 
