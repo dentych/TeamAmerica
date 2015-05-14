@@ -3,7 +3,7 @@
 using namespace std;
 Protocol::Protocol(){
 	
-	cmdArray = new char[8];
+	cmdArray = new char[9];
 
 	cmdArray[CMD_FULLSTOP] = 'F';
 	cmdArray[CMD_UP] = 'O';
@@ -13,6 +13,7 @@ Protocol::Protocol(){
 	cmdArray[CMD_SHOOT] = 'S';
 	cmdArray[CMD_RESET] = 'R';
 	cmdArray[CMD_ALARM] = 'A';
+	cmdArray[CMD_ALARM] = 'L';
 }
 
 Protocol::~Protocol() {
