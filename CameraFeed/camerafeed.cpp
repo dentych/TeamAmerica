@@ -1,0 +1,200 @@
+#include "camerafeed.h"
+#include <iostream>
+#include <stdio.h>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QDebug>
+#include "login.h"
+#include "genlad.h"
+
+using namespace std;
+using namespace cv;
+
+extern int skud_;
+ofstream file;
+
+cameraFeed::cameraFeed(QWidget *parent)
+    : QWidget(parent)
+{
+
+    timer_ = new QTimer(this);
+
+    connect(timer_, SIGNAL(timeout()), this, SLOT(updatePicture()));
+    timer_->start(20);
+
+    QHBoxLayout *hbox = new QHBoxLayout(this);
+    QHBoxLayout *hbox2 = new QHBoxLayout();
+    QVBoxLayout *vbox = new QVBoxLayout();
+    QVBoxLayout *vbox2 = new QVBoxLayout();
+
+    aktiver_ = new QPushButton("Aktiver");
+    deaktiver_ = new QPushButton("Deaktiver");
+    genlad_ = new QPushButton("Genlad");
+    advarsel_ = new QPushButton("Advarsel");
+    logud_ = new QPushButton("Log ud");
+
+    connect(aktiver_, SIGNAL(pressed()), this, SLOT(OnAktiverPressed()));
+    connect(deaktiver_, SIGNAL(pressed()), this, SLOT(OnDeaktiverPressed()));
+    connect(genlad_, SIGNAL(pressed()), this, SLOT(OnGenladPressed()));
+    connect(advarsel_, SIGNAL(pressed()), this, SLOT(OnAdvarselPressed()));
+    connect(logud_, SIGNAL(pressed()), this, SLOT(OnLogUdPressed()));
+
+    /*
+    start_ = new QPushButton("Start");
+    slut_ = new QPushButton("Slut");
+    connect(start_, SIGNAL(pressed()), this, SLOT(Onstartpressed()));
+    connect(slut_, SIGNAL(pressed()), this, SLOT(Onslutpressed()));
+    */
+
+    ifstream infile("AntalSkud.txt");
+    infile>>skud_;
+
+    text_->setText("Antal skud: ");
+    QFont font = text_->font();
+    font.setPointSize(16);
+    text_->setFont(font);
+    sstat_->setFont(font);
+    sstat_->setNum(skud_);
+
+    vbox->setSpacing(20);
+    vbox->addStretch(1);
+    vbox->addWidget(aktiver_);
+    vbox->addWidget(deaktiver_);
+    vbox->addWidget(genlad_);
+    vbox->addWidget(advarsel_);
+    vbox->addWidget(logud_);
+    vbox->addStretch(1);
+    vbox->addWidget(msg_);
+
+    vbox2->setSpacing(20);
+    vbox2->addStretch(1);
+    vbox2->addWidget(feed_);
+    vbox2->addLayout(hbox2);
+    vbox2->addStretch(1);
+
+    hbox2->addWidget(text_);
+    hbox2->addWidget(sstat_,0,Qt::AlignLeft);
+    hbox2->addStretch(1);
+
+    hbox->setSpacing(20);
+    hbox->addStretch(1);
+    hbox->addLayout(vbox2);
+    hbox->addLayout(vbox);
+    hbox->addStretch(1);
+
+
+
+
+    capture = cvCaptureFromCAM( CV_CAP_ANY ); //0=default, -1=any camera, 1..99=your camera
+    if( !capture )
+    {
+    cout << "No camera detected" << endl;
+    }
+
+}
+
+void cameraFeed::updatePicture()
+{
+
+    if( capture )
+    {
+    IplImage* iplImg = cvQueryFrame( capture );
+
+    feed_->setPixmap(QPixmap::fromImage(putImage(iplImg)));
+
+    }
+
+}
+
+QImage cameraFeed::putImage(const Mat& mat)
+{
+    // 8-bits unsigned, NO. OF CHANNELS=1
+    if(mat.type()==CV_8UC1)
+    {
+        // Set the color table (used to translate colour indexes to qRgb values)
+        QVector<QRgb> colorTable;
+        for (int i=0; i<256; i++)
+            colorTable.push_back(qRgb(i,i,i));
+        // Copy input Mat
+        const uchar *qImageBuffer = (const uchar*)mat.data;
+        // Create QImage with same dimensions as input Mat
+        QImage img(qImageBuffer, mat.cols, mat.rows, mat.step, QImage::Format_Indexed8);
+        img.setColorTable(colorTable);
+        return img;
+    }
+    // 8-bits unsigned, NO. OF CHANNELS=3
+    if(mat.type()==CV_8UC3)
+    {
+        // Copy input Mat
+        const uchar *qImageBuffer = (const uchar*)mat.data;
+        // Create QImage with same dimensions as input Mat
+        QImage img(qImageBuffer, mat.cols, mat.rows, mat.step, QImage::Format_RGB888);
+        return img.rgbSwapped();
+    }
+    else
+    {
+        qDebug() << "ERROR: Mat could not be converted to QImage.";
+        return QImage();
+    }
+}
+
+void cameraFeed::OnAktiverPressed()
+{
+    msg_->setText("Aktiver Trykket");
+}
+
+void cameraFeed::OnDeaktiverPressed()
+{
+    msg_->setText("Deaktiver Trykket");
+}
+
+void cameraFeed::OnGenladPressed()
+{
+    Genlad *genlad= new Genlad;
+    genlad->setWindowTitle("Genlad");
+    genlad->exec();
+
+    sstat_->setNum(skud_);
+}
+
+void cameraFeed::OnAdvarselPressed()
+{
+    msg_->setText("Advarsel Trykket");
+
+}
+
+
+void cameraFeed::OnLogUdPressed()
+{
+    Login *log = new Login;
+    log->setFixedSize(500,300);
+    log->setWindowTitle("Login");
+    log->show();
+
+    this->close();
+}
+
+/*
+void cameraFeed::Onstartpressed()
+{
+    cout << "In capture ..." << endl;
+    if(feed_->isVisible() == false)
+    {
+        feed_->show();
+    }
+
+}
+
+void cameraFeed::Onslutpressed()
+{
+    feed_->hide();
+}
+*/
+
+cameraFeed::~cameraFeed()
+{
+    cvReleaseCapture( &capture );
+    file.open("AntalSkud.txt",ios_base::out);
+    file << skud_;
+    file.close();
+}
