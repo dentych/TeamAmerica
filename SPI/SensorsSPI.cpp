@@ -155,8 +155,7 @@ int SensorsSPI::JoystickX()
 
 	a2dValX = (dataX[1] << 8) & 0b1100000000;		//merge data[1] & data[2] to get result
 	a2dValX |= (dataX[2] & 0xff);
-	
-	cout << "The Result for X is: \n" << a2dValX << endl;
+
 	return a2dValX;
 }
 
@@ -174,7 +173,6 @@ int SensorsSPI::JoystickY()
 	a2dValY = (dataY[1] << 8) & 0b1100000000; 
 	a2dValY |= (dataY[2] & 0xff);
 
-	cout << "The Result for Y is: \n" << a2dValY << endl;
 	return a2dValY;
 }
 
@@ -192,7 +190,6 @@ int SensorsSPI::JoystickTrig()
 	a2dValTrig = (dataTrig[1] << 8) & 0b1100000000; 
 	a2dValTrig |= (dataTrig[2] & 0xff);
 
-	cout << "The Result for Trigger is: \n" << a2dValTrig << endl;
 	return a2dValTrig;
 }
 

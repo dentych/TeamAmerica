@@ -1,6 +1,5 @@
 #include "Joystick.h"
 
-bool JoystickThread::alarmEnabled = true;
 int JoystickThread::objectCount = 0;
 
 JoystickThread::JoystickThread(UARTQueue *uartQueue, QLabel *label, int *shots)
@@ -13,6 +12,7 @@ JoystickThread::JoystickThread(UARTQueue *uartQueue, QLabel *label, int *shots)
     alarmEnabled = true;
     lastX = 0;
     lastY = 0;
+    alarmCooldown = 0;
 }
 
 void JoystickThread::enableAlarm() {
@@ -34,10 +34,15 @@ void JoystickThread::run() {
         trigger = spi->JoystickTrig();
         if (alarmEnabled) alarm = spi->Pirsensor();
 
+        std::cout << "Joystick X: " << xCord << std::endl <<
+                     "Joystick Y: " << yCord << std::endl <<
+                     "Joystick trigger: " << trigger << std::endl <<
+                     "Pir sensor: " << alarm << std::endl;
+
         handleXCord(xCord);
         handleYCord(yCord);
         handleTrigger(trigger);
-        handleAlarm(alarm);
+        if (alarmEnabled) handleAlarm(alarm);
 
         usleep(100000);
     }

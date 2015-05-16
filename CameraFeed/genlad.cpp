@@ -63,11 +63,14 @@ void Genlad::OnOkPressed()
 
 void Genlad::keyPressEvent(QKeyEvent *ke) {
     switch (ke->key()) {
-            case Qt::Key_NumberSign:
-                OnOkPressed();
-                break;
-            default:
-                les_->insert(ke->text());
-                break;
+    case Qt::Key_NumberSign:
+        OnOkPressed();
+        break;
+    case Qt::Key_Asterisk:
+        les_->backspace();
+        break;
+    default:
+        les_->insert(ke->text());
+        break;
     }
 }
