@@ -5,6 +5,7 @@
 #include "../UART/UART.h"
 #include "../Protocol/Protocol.h"
 #include <iostream>
+#include <unistd.h>
 #include <QThread>
 
 class JoystickThread : public QThread {
@@ -23,7 +24,7 @@ private:
     SensorsSPI *spi;
     UARTQueue *uartQueue;
     Protocol protocol;
-    int lastX, lastY;
+    int lastX, lastY, lastTrig;
     bool alarmEnabled;
     bool running;
 };
