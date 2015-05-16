@@ -164,7 +164,7 @@ void cameraFeed::OnDeaktiverPressed()
 
 void cameraFeed::OnGenladPressed()
 {
-    Genlad *genlad= new Genlad;
+    Genlad *genlad= new Genlad(keyboard);
     genlad->setWindowTitle("Genlad");
     genlad->exec();
 

@@ -5,8 +5,8 @@
 
 int skud_ = 0;
 
-Genlad::Genlad(QWidget *parent)
-    : QDialog(parent)
+Genlad::Genlad(MatrixKeyboard *keyboard, QWidget *parent)
+    : keyboard(keyboard), QDialog(parent)
 {
 
     QVBoxLayout *vbox = new QVBoxLayout(this);
@@ -33,6 +33,8 @@ Genlad::Genlad(QWidget *parent)
     vbox->addLayout(hbox);
     vbox->addWidget(ok_,0,Qt::AlignCenter);
     vbox->addStretch(1);
+
+    this->keyboard->setTarget(this);
 }
 
 Genlad::~Genlad()
@@ -57,4 +59,15 @@ void Genlad::OnOkPressed()
 
     this->close();
 
+}
+
+void Genlad::keyPressEvent(QKeyEvent *ke) {
+    switch (ke->key()) {
+            case Qt::Key_NumberSign:
+                OnOkPressed();
+                break;
+            default:
+                les_->insert(ke->text());
+                break;
+    }
 }

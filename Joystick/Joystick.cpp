@@ -96,7 +96,7 @@ void JoystickThread::handleYCord(int yCord) {
 void JoystickThread::handleTrigger(int trig) {
     int trigBit;
 
-    if (shots <= 0) {
+    if (*shots <= 0) {
         return;
     }
 
