@@ -26,6 +26,7 @@ public:
 	int JoystickY();
 	int JoystickTrig();
 	int Pirsensor();
+    void WriteToSpeaker(int value);
 
 private:
     unsigned char _mode;			//Spimode

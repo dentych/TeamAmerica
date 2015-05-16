@@ -1,6 +1,13 @@
 #include "Joystick.h"
 
+bool JoystickThread::alarmEnabled = true;
+int JoystickThread::objectCount = 0;
+
 JoystickThread::JoystickThread(UARTQueue *uartQueue) : uartQueue(uartQueue) {
+    if (objectCount > 0) {
+        std::cout << "FATAL ERROR: Two joystick thread objects have been instantiated!" << std::endl;
+        exit(-1);
+    }
     spi = new SensorsSPI("/dev/spidev0.0", SPI_MODE_0, 3000000, 8);
     alarmEnabled = true;
     lastX = 0;
@@ -20,23 +27,24 @@ void JoystickThread::run() {
     running = true;
 
     while (running) {
-        int xCord, yCord, trigger;
+        int xCord, yCord, trigger, alarm;
         xCord = spi->JoystickX();
         yCord = spi->JoystickY();
         trigger = spi->JoystickTrig();
+        if (alarmEnabled) alarm = spi->Pirsensor();
 
         handleXCord(xCord);
         handleYCord(yCord);
         handleTrigger(trigger);
+        handleAlarm(alarm);
 
-        usleep(250000);
+        usleep(100000);
     }
 }
 
 void JoystickThread::handleXCord(int xCord) {
     Protocol::CMDS direction;
     int xDelta = xCord - 512;
-    int stopCount = 0;
 
     if (xDelta > 0) {
         direction = Protocol::CMD_RIGHT;
@@ -48,9 +56,9 @@ void JoystickThread::handleXCord(int xCord) {
 
     if (xDelta < 100 && lastX != 0) {
         lastX = 0;
-        uartQueue->post(protocol.constructString(CMD_FULLSTOP, 0), 4);
+        uartQueue->post(protocol.constructString(Protocol::CMD_FULLSTOP, '0'), 4);
     }
-    else if (xDelta < 400 && lastX != 1) {
+    else if (xDelta < 400 && xDelta > 100 && lastX != 1) {
         lastX = 1;
         uartQueue->post(protocol.constructString(direction, '1'), 4);
     }
@@ -72,21 +80,13 @@ void JoystickThread::handleYCord(int yCord) {
         direction = Protocol::CMD_DOWN;
     }
 
-    if (yDelta > 340 && lastY != 3) {
-        lastY = 3;
-        uartQueue->post(protocol.constructString(direction, '3'), 4);
-    }
-    else if (yDelta < 340 && yDelta > 170 && lastY != 2) {
-        lastY = 2;
-        uartQueue->post(protocol.constructString(direction, '2'), 4);
-    }
-    else if (yDelta < 170 && yDelta > 50 && lastY != 1) {
+    if (yDelta > 200 && lastY != 1) {
         lastY = 1;
         uartQueue->post(protocol.constructString(direction, '1'), 4);
     }
-    else if (yDelta < 50 && lastY != 0) {
+    else if (yDelta < 200 && lastY != 0) {
         lastY = 0;
-        uartQueue->post(protocol.constructString(Protocol::CMD_FULLSTOP, 0), 4);
+        uartQueue->post(protocol.constructString(Protocol::CMD_FULLSTOP, '0'), 4);
     }
 }
 
@@ -110,4 +110,16 @@ void JoystickThread::handleTrigger(int trig) {
 void JoystickThread::stop() {
     running = false;
     this->exit();
+}
+
+void JoystickThread::handleAlarm(int alarm) {
+    if (alarm > 800 && !alarmCooldown) {
+        alarmCooldown = 20;
+        spi->WriteToSpeaker(0);
+    }
+
+    if (alarmCooldown > 0) {
+        if (alarmCooldown == 1) spi->WriteToSpeaker(1);
+        alarmCooldown--;
+    }
 }

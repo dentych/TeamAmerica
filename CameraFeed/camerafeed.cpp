@@ -87,16 +87,23 @@ cameraFeed::cameraFeed(MatrixKeyboard *keyboard, QWidget *parent)
     hbox->addLayout(vbox);
     hbox->addStretch(1);
 
-
-
-
     capture = cvCaptureFromCAM( CV_CAP_ANY ); //0=default, -1=any camera, 1..99=your camera
     if( !capture )
     {
     cout << "No camera detected" << endl;
     }
 
+    // Direct keyboard events here.
 	this->keyboard->setTarget(this);
+
+    // Turn on laser
+    /* MAGICS HERE */
+
+    uartQueue = new UARTQueue();
+    uart = new UART("/dev/ttyAMA0", 9600, uartQueue);
+    uart->start();
+    joystick = new JoystickThread(uartQueue);
+    joystick->start();
 }
 
 void cameraFeed::updatePicture()
@@ -146,12 +153,14 @@ QImage cameraFeed::putImage(const Mat& mat)
 
 void cameraFeed::OnAktiverPressed()
 {
-    msg_->setText("Aktiver Trykket");
+    joystick->enableAlarm();
+    msg_->setText("Alarm aktiveret");
 }
 
 void cameraFeed::OnDeaktiverPressed()
 {
-    msg_->setText("Deaktiver Trykket");
+    joystick->disableAlarm();
+    msg_->setText("Alarm deaktiveret");
 }
 
 void cameraFeed::OnGenladPressed()
@@ -161,10 +170,13 @@ void cameraFeed::OnGenladPressed()
     genlad->exec();
 
     sstat_->setNum(skud_);
+
+    this->keyboard->setTarget(this);
 }
 
 void cameraFeed::OnAdvarselPressed()
 {
+    uartQueue->post(protocol.constructString(Protocol::CMD_ALARM, '0'), 4);
     msg_->setText("Advarsel Trykket");
 
 }
@@ -221,6 +233,10 @@ void cameraFeed::keyPressEvent(QKeyEvent *k) {
 cameraFeed::~cameraFeed()
 {
     cvReleaseCapture( &capture );
+
+    // Turn off laser
+    /* LASER MAGIC */
+
     file.open("AntalSkud.txt",ios_base::out);
     file << skud_;
     file.close();

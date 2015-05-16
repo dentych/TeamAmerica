@@ -112,6 +112,8 @@ return retVal;
  
  
 SensorsSPI::SensorsSPI(){
+    wiringPiSetup();
+    pinMode (25, OUTPUT);
     this->_mode = SPI_MODE_0 ;
     this->_bitsPerWord = 8;
     this->_speed = 1000000;
@@ -208,15 +210,9 @@ int SensorsSPI::Pirsensor()
 	a2dValPIR = (dataPIR[1] << 8) & 0b1100000000;
 	a2dValPIR |= (dataPIR[2] & 0xff);
 
-	if (a2dValPIR > 700)
-	{	
-	cout << "MOMVEMENT DETECTED\n" << endl;
-	wiringPiSetup () ;
-  	pinMode (25, OUTPUT) ;
-   	digitalWrite (25, LOW) ;
-	delay(200);
-	digitalWrite (25, HIGH);  	
-	}
-  	return 0 ;
+    return a2dValPIR;
 }
 
+void SensorsSPI::WriteToSpeaker(int value) {
+    digitalWrite(25, value);
+}

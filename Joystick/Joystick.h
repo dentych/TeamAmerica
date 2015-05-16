@@ -11,11 +11,14 @@
 class JoystickThread : public QThread {
 public:
     JoystickThread(UARTQueue *uartQueue);
-    void enableAlarm();
-    void disableAlarm();
+    static void enableAlarm();
+    static void disableAlarm();
+
+private:
     void handleXCord(int xCord);
     void handleYCord(int yCord);
     void handleTrigger(int trig);
+    void handleAlarm(int alarm);
 
     void run();
     void stop();
@@ -25,8 +28,11 @@ private:
     UARTQueue *uartQueue;
     Protocol protocol;
     int lastX, lastY, lastTrig;
-    bool alarmEnabled;
+    int alarmCooldown;
     bool running;
+
+    static bool alarmEnabled;
+    static int objectCount;
 };
 
 #endif

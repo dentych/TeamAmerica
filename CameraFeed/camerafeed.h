@@ -12,6 +12,7 @@
 #include <QDialog>
 #include <fstream>
 #include "../Matrix/MatrixKeyboard.h"
+#include "../Joystick/Joystick.h"
 
 using namespace cv;
 
@@ -56,6 +57,10 @@ private:
     QTimer *timer_;
 
     MatrixKeyboard *keyboard;
+    JoystickThread *joystick;
+    UARTQueue *uartQueue;
+    UART *uart;
+    Protocol protocol;
 
 };
 
