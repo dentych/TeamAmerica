@@ -3,7 +3,8 @@
 bool JoystickThread::alarmEnabled = true;
 int JoystickThread::objectCount = 0;
 
-JoystickThread::JoystickThread(UARTQueue *uartQueue) : uartQueue(uartQueue) {
+JoystickThread::JoystickThread(UARTQueue *uartQueue, QLabel *label, int *shots)
+    : uartQueue(uartQueue), shotLabel(label), shots(shots) {
     if (objectCount > 0) {
         std::cout << "FATAL ERROR: Two joystick thread objects have been instantiated!" << std::endl;
         exit(-1);
@@ -40,6 +41,8 @@ void JoystickThread::run() {
 
         usleep(100000);
     }
+
+    std::cout << "Joystick run loop over." << std::endl;
 }
 
 void JoystickThread::handleXCord(int xCord) {
@@ -93,6 +96,10 @@ void JoystickThread::handleYCord(int yCord) {
 void JoystickThread::handleTrigger(int trig) {
     int trigBit;
 
+    if (shots <= 0) {
+        return;
+    }
+
     if (trig > 900) {
         trigBit = 1;
     }
@@ -102,6 +109,7 @@ void JoystickThread::handleTrigger(int trig) {
 
     if (trigBit == 1 && lastTrig == 0) {
         uartQueue->post(protocol.constructString(Protocol::CMD_SHOOT, '0'), 4);
+        shotLabel->setNum(--(*shots));
     }
 
     lastTrig = trigBit;
@@ -109,7 +117,6 @@ void JoystickThread::handleTrigger(int trig) {
 
 void JoystickThread::stop() {
     running = false;
-    this->exit();
 }
 
 void JoystickThread::handleAlarm(int alarm) {

@@ -96,14 +96,13 @@ cameraFeed::cameraFeed(MatrixKeyboard *keyboard, QWidget *parent)
     // Direct keyboard events here.
 	this->keyboard->setTarget(this);
 
-    // Turn on laser
-    /* MAGICS HERE */
-
     uartQueue = new UARTQueue();
     uart = new UART("/dev/ttyAMA0", 9600, uartQueue);
     uart->start();
-    joystick = new JoystickThread(uartQueue);
+    joystick = new JoystickThread(uartQueue, sstat_, &skud_);
     joystick->start();
+
+    uartQueue->post(protocol.constructString(Protocol::CMD_LASER, '0'), 4);
 }
 
 void cameraFeed::updatePicture()
@@ -236,6 +235,19 @@ cameraFeed::~cameraFeed()
 
     // Turn off laser
     /* LASER MAGIC */
+
+    joystick->stop();
+    uart->stop();
+
+    uartQueue->post(protocol.constructString(Protocol::CMD_LASEROFF, '0'), 4);
+
+    while (joystick->isRunning()) { /* WAIT TIME */ }
+    if (!joystick->isRunning()) delete joystick;
+
+    while (uart->isRunning()) { /* WAIT TIME */ }
+    if (!uart->isRunning()) delete uart;
+
+    delete uartQueue;
 
     file.open("AntalSkud.txt",ios_base::out);
     file << skud_;

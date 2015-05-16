@@ -7,12 +7,14 @@
 #include <iostream>
 #include <unistd.h>
 #include <QThread>
+#include <QLabel>
 
 class JoystickThread : public QThread {
 public:
-    JoystickThread(UARTQueue *uartQueue);
+    JoystickThread(UARTQueue *uartQueue, QLabel *shotLabel, int *shots);
     static void enableAlarm();
     static void disableAlarm();
+    void stop();
 
 private:
     void handleXCord(int xCord);
@@ -20,8 +22,8 @@ private:
     void handleTrigger(int trig);
     void handleAlarm(int alarm);
 
+protected:
     void run();
-    void stop();
 
 private:
     SensorsSPI *spi;
@@ -29,6 +31,8 @@ private:
     Protocol protocol;
     int lastX, lastY, lastTrig;
     int alarmCooldown;
+    QLabel *shotLabel;
+    int *shots;
     bool running;
 
     static bool alarmEnabled;

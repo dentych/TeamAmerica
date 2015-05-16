@@ -15,7 +15,9 @@ void UARTQueue::post(std::string data, int bytes) {
 
 UARTItem UARTQueue::get() {
     QMutexLocker lock(&mut);
-    postWait.wait(&mut);
+    while (items.empty()) {
+        postWait.wait(&mut);
+    }
 
     UARTItem item = items.front();
     items.pop();
@@ -52,6 +54,8 @@ void UART::run() {
         UARTItem item = queue->get();
         handle(item);
     }
+
+    std::cout << "UART run loop over!" << std::endl;
 }
 
 void UART::handle(UARTItem &item) {
@@ -62,7 +66,6 @@ void UART::handle(UARTItem &item) {
 
 void UART::stop() {
     running = false;
-    this->exit();
 }
 
 void UART::send(std::string data, int bytes) {

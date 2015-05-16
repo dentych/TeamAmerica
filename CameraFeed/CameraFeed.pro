@@ -11,16 +11,28 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = CameraFeed
 TEMPLATE = app
 
-SOURCES += main.cpp\
-        camerafeed.cpp\
-		login.cpp \
-    	genlad.cpp \
-		../Matrix/MatrixKeyboard.cpp
+SOURCES += \
+    camerafeed.cpp \
+    genlad.cpp \
+    login.cpp \
+    main.cpp \
+    ../Joystick/Joystick.cpp \
+    ../Log/Log.cpp \
+    ../Matrix/MatrixKeyboard.cpp \
+    ../Protocol/Protocol.cpp \
+    ../SPI/SensorsSPI.cpp \
+    ../UART/UART.cpp
 
-HEADERS  += camerafeed.h\
-			login.h \
-			genlad.h \
-			../Matrix/MatrixKeyboard.h
+HEADERS  += \
+    camerafeed.h \
+    genlad.h \
+    login.h \
+    ../Joystick/Joystick.h \
+    ../Log/Log.h \
+    ../Matrix/MatrixKeyboard.h \
+    ../Protocol/Protocol.h \
+    ../SPI/SensorsSPI.h \
+    ../UART/UART.h
 
 INCLUDEPATH += /home/pi/projekt
 #INCLUDEPATH += C:/Users/andreas/Documents/skole/PRJ3/Login_Qt4

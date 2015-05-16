@@ -13,7 +13,8 @@ Protocol::Protocol(){
 	cmdArray[CMD_SHOOT] = 'S';
 	cmdArray[CMD_RESET] = 'R';
 	cmdArray[CMD_ALARM] = 'A';
-	cmdArray[CMD_ALARM] = 'L';
+    cmdArray[CMD_LASER] = 'L';
+    cmdArray[CMD_LASEROFF] = 'K';
 }
 
 Protocol::~Protocol() {
