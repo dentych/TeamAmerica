@@ -14,8 +14,8 @@ using namespace cv;
 extern int skud_;
 ofstream file;
 
-cameraFeed::cameraFeed(MatrixKeyboard *keyboard, QWidget *parent)
-    : keyboard(keyboard), QWidget(parent)
+cameraFeed::cameraFeed(UARTQueue *queue, UART *uart, JoystickThread *joystick, MatrixKeyboard *keyboard, QWidget *parent)
+    : uartQueue(queue), uart(uart), joystick(joystick), keyboard(keyboard), QWidget(parent)
 {
     capture = 0;
     feed_ = new QLabel();
@@ -99,12 +99,8 @@ cameraFeed::cameraFeed(MatrixKeyboard *keyboard, QWidget *parent)
     // Direct keyboard events here.
 	this->keyboard->setTarget(this);
 
-    uartQueue = new UARTQueue();
-    uart = new UART("/dev/ttyAMA0", 9600, uartQueue);
-    uart->start();
-    joystick = new JoystickThread(uartQueue, sstat_, &skud_, msg_);
-    joystick->start();
-
+    joystick->setCameraVars(sstat_, &skud_, msg_);
+    joystick->enableJoystick();
     uartQueue->post(protocol.constructString(Protocol::CMD_LASER, '0'), 4);
 }
 
@@ -113,9 +109,9 @@ void cameraFeed::updatePicture()
 
     if( capture )
     {
-    IplImage* iplImg = cvQueryFrame( capture );
+        IplImage* iplImg = cvQueryFrame( capture );
 
-    feed_->setPixmap(QPixmap::fromImage(putImage(iplImg)));
+        feed_->setPixmap(QPixmap::fromImage(putImage(iplImg)));
 
     }
 
@@ -189,11 +185,16 @@ void cameraFeed::OnAdvarselPressed()
 
 void cameraFeed::OnLogUdPressed()
 {
-    Login *log = new Login(keyboard);
+    // Disable joystick polling
+    joystick->disableJoystick();
+
+    // Show login screen
+    Login *log = new Login(uartQueue, uart, joystick, keyboard);
     log->showFullScreen();
     log->setWindowTitle("Login");
     log->show();
 
+    // Kill this window
     this->close();
 }
 
@@ -239,21 +240,7 @@ cameraFeed::~cameraFeed()
 {
     cvReleaseCapture( &capture );
 
-    // Turn off laser
-    /* LASER MAGIC */
-
-    joystick->stop();
-    uart->stop();
-
     uartQueue->post(protocol.constructString(Protocol::CMD_LASEROFF, '0'), 4);
-
-    while (joystick->isRunning()) { /* WAIT TIME */ }
-    if (!joystick->isRunning()) delete joystick;
-
-    while (uart->isRunning()) { /* WAIT TIME */ }
-    if (!uart->isRunning()) delete uart;
-
-    delete uartQueue;
 
     file.open("AntalSkud.txt",ios_base::out);
     file << skud_;

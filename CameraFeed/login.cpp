@@ -1,8 +1,8 @@
 #include "login.h"
 
 
-Login::Login(MatrixKeyboard *keyboard, QWidget *parent)
-    : keyboard(keyboard), QWidget(parent)
+Login::Login(UARTQueue *queue, UART *uart, JoystickThread *joystick, MatrixKeyboard *keyboard, QWidget *parent)
+    : uartQueue(queue), uart(uart), joystick(joystick), keyboard(keyboard), QWidget(parent)
 {
      le1 = new QLineEdit(this);
      password_ = "1905";
@@ -48,7 +48,7 @@ void Login::OnLogIndPressed()
 
      //status_->setText("Kode korrekt!!");
 
-     cameraFeed *cam = new cameraFeed(keyboard);
+     cameraFeed *cam = new cameraFeed(uartQueue, uart, joystick, keyboard);
      cam->setAttribute(Qt::WA_DeleteOnClose);
      cam->showFullScreen();
      cam->show();
