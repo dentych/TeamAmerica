@@ -6,6 +6,7 @@
 #include <QDebug>
 #include "login.h"
 #include "genlad.h"
+#include "../Log/Log.h"
 
 using namespace std;
 using namespace cv;
@@ -60,6 +61,8 @@ cameraFeed::cameraFeed(MatrixKeyboard *keyboard, QWidget *parent)
     text_->setFont(font);
     sstat_->setFont(font);
     sstat_->setNum(skud_);
+
+    Log *log = new Log;
 
     vbox->setSpacing(20);
     vbox->addStretch(1);
@@ -154,12 +157,14 @@ void cameraFeed::OnAktiverPressed()
 {
     joystick->enableAlarm();
     msg_->setText("Alarm aktiveret");
+    log.writeLog(Log::aktiver);
 }
 
 void cameraFeed::OnDeaktiverPressed()
 {
     joystick->disableAlarm();
     msg_->setText("Alarm deaktiveret");
+    log.writeLog(Log::deaktiver);
 }
 
 void cameraFeed::OnGenladPressed()
@@ -177,6 +182,7 @@ void cameraFeed::OnAdvarselPressed()
 {
     uartQueue->post(protocol.constructString(Protocol::CMD_ALARM, '0'), 4);
     msg_->setText("Advarsel Trykket");
+    log->writeLog(Log::advarsel);
 
 }
 
@@ -184,7 +190,7 @@ void cameraFeed::OnAdvarselPressed()
 void cameraFeed::OnLogUdPressed()
 {
     Login *log = new Login(keyboard);
-    log->setFixedSize(500,300);
+    log->showFullScreen();
     log->setWindowTitle("Login");
     log->show();
 

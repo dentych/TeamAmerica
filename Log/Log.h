@@ -6,10 +6,10 @@ class Log
 {
 public:
 	Log();
-	enum CMD {skyd, alarm, aktiver, deaktiver, uart};
+    enum CMD {skyd, alarm, aktiver, deaktiver, uart, advarsel};
 	void writeLog(CMD cmd);
 	string timestamp();
 
 private:
-	string cmdArr[5];
+    string cmdArr[6];
 };

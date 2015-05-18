@@ -50,6 +50,7 @@ void Login::OnLogIndPressed()
 
      cameraFeed *cam = new cameraFeed(keyboard);
      cam->setAttribute(Qt::WA_DeleteOnClose);
+     cam->showFullScreen();
      cam->show();
 
      this->close();

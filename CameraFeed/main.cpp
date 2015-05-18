@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     Login window;
-    window.setFixedSize(500,300);
+    window.showFullScreen();
     window.setWindowTitle("Login");
     window.show();
 

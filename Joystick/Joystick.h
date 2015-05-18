@@ -4,6 +4,7 @@
 #include "../SPI/SensorsSPI.h"
 #include "../UART/UART.h"
 #include "../Protocol/Protocol.h"
+#include "../Log/Log.h"
 #include <iostream>
 #include <unistd.h>
 #include <QThread>

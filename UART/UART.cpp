@@ -1,5 +1,6 @@
 #include "UART.h"
 
+
 /*
  * UARTQueue class implementation
  */
@@ -35,9 +36,11 @@ UARTQueue::~UARTQueue() {
 UART::UART(const char *device, int baudRate, UARTQueue *queue) : queue(queue) {
 	fd = serialOpen(device, baudRate);
 
+    Log *log = new Log;
 	if (fd < 0) {
 		//log.writeLog(Log::uart);
 		std::cout << "Can't connect to UART device." << std::endl;
+        log->writeLog(Log::uart);
 	}
 }
 
