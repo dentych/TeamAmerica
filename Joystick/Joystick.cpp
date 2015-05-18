@@ -117,6 +117,8 @@ void JoystickThread::handleTrigger(int trig) {
     if (trigBit == 1 && lastTrig == 0) {
         uartQueue->post(protocol.constructString(Protocol::CMD_SHOOT, '0'), 4);
         shotLabel->setNum(--(*shots));
+        if ((*shots)==0)
+        	
         log->writeLog(Log::skyd);
     }
 
