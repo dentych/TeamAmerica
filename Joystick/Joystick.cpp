@@ -135,7 +135,7 @@ void JoystickThread::handleAlarm(int alarm) {
     }
 
     if (alarmCooldown > 0) {
-        if (alarmCooldown == 1) spi->WriteToSpeaker(1);
+        if (alarmCooldown == 18) spi->WriteToSpeaker(1);
         alarmCooldown--;
     }
 }
