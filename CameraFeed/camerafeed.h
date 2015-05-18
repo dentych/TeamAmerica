@@ -61,7 +61,7 @@ private:
     UARTQueue *uartQueue;
     UART *uart;
     Protocol protocol;
-
+    Log *log;
 };
 
 #endif // CAMERAFEED_H

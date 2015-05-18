@@ -62,7 +62,7 @@ cameraFeed::cameraFeed(MatrixKeyboard *keyboard, QWidget *parent)
     sstat_->setFont(font);
     sstat_->setNum(skud_);
 
-    Log *log = new Log;
+    log = new Log;
 
     vbox->setSpacing(20);
     vbox->addStretch(1);
@@ -157,14 +157,14 @@ void cameraFeed::OnAktiverPressed()
 {
     joystick->enableAlarm();
     msg_->setText("Alarm aktiveret");
-    log.writeLog(Log::aktiver);
+    log->writeLog(Log::aktiver);
 }
 
 void cameraFeed::OnDeaktiverPressed()
 {
     joystick->disableAlarm();
     msg_->setText("Alarm deaktiveret");
-    log.writeLog(Log::deaktiver);
+    log->writeLog(Log::deaktiver);
 }
 
 void cameraFeed::OnGenladPressed()
