@@ -5,7 +5,7 @@
 
 int skud_ = 0;
 
-Genlad::Genlad(MatrixKeyboard *keyboard, QWidget *parent)
+Genlad::Genlad(MatrixKeyboard *keyboard, QLabel *msg, QWidget *parent)
     : keyboard(keyboard), msg_(msg), QDialog(parent)
 {
 
