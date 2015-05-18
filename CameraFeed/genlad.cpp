@@ -6,7 +6,7 @@
 int skud_ = 0;
 
 Genlad::Genlad(MatrixKeyboard *keyboard, QWidget *parent)
-    : keyboard(keyboard), QDialog(parent)
+    : keyboard(keyboard), msg_(msg), QDialog(parent)
 {
 
     QVBoxLayout *vbox = new QVBoxLayout(this);
@@ -56,6 +56,8 @@ void Genlad::OnOkPressed()
     skud_ = temp;
 
     //info_->setText(QString::number(skud_));
+
+    msg_->setText("");
 
     this->close();
 
