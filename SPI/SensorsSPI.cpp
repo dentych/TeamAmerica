@@ -57,6 +57,9 @@ int SensorsSPI::spi_init(std::string devspi)
 		perror("Unable to READ speed");
 		exit(1);
     }
+
+    pinMode (26, OUTPUT);
+
     return check;
 }
 
@@ -112,8 +115,6 @@ return retVal;
  
  
 SensorsSPI::SensorsSPI(){
-    wiringPiSetup();
-    pinMode (25, OUTPUT);
     this->_mode = SPI_MODE_0 ;
     this->_bitsPerWord = 8;
     this->_speed = 1000000;
@@ -211,5 +212,5 @@ int SensorsSPI::Pirsensor()
 }
 
 void SensorsSPI::WriteToSpeaker(int value) {
-    digitalWrite(25, value);
+    digitalWrite(26, value);
 }
