@@ -57,7 +57,7 @@ void Login::OnLogIndPressed()
 
      }
      else
-     status_->setText("<font color='red'>Forkert kode, prøv igen..</font>");
+     status_->setText("<font color='red'>Forkert kode..</font>");
 }
 
 void Login::keyPressEvent(QKeyEvent *k) {
