@@ -2,8 +2,8 @@
 
 int JoystickThread::objectCount = 0;
 
-JoystickThread::JoystickThread(UARTQueue *uartQueue, QLabel *label, int *shots)
-    : uartQueue(uartQueue), shotLabel(label), shots(shots) {
+JoystickThread::JoystickThread(UARTQueue *uartQueue, QLabel *label, int *shots, QLabel *msg)
+    : uartQueue(uartQueue), shotLabel(label), shots(shots), msg(msg) {
     if (objectCount > 0) {
         std::cout << "FATAL ERROR: Two joystick thread objects have been instantiated!" << std::endl;
         exit(-1);
@@ -104,6 +104,7 @@ void JoystickThread::handleTrigger(int trig) {
     int trigBit;
 
     if (*shots <= 0) {
+        msg->setText("Magasin tomt!");
         return;
     }
 
@@ -117,6 +118,7 @@ void JoystickThread::handleTrigger(int trig) {
     if (trigBit == 1 && lastTrig == 0) {
         uartQueue->post(protocol.constructString(Protocol::CMD_SHOOT, '0'), 4);
         shotLabel->setNum(--(*shots));
+        	
         log->writeLog(Log::skyd);
     }
 

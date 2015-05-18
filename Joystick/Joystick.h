@@ -12,7 +12,7 @@
 
 class JoystickThread : public QThread {
 public:
-    JoystickThread(UARTQueue *uartQueue, QLabel *shotLabel, int *shots);
+    JoystickThread(UARTQueue *uartQueue, QLabel *shotLabel, int *shots, QLabel *msg);
     void enableAlarm();
     void disableAlarm();
     void stop();
@@ -34,6 +34,7 @@ private:
     int lastX, lastY, lastTrig;
     int alarmCooldown;
     QLabel *shotLabel;
+    QLabel *msg;
     int *shots;
     bool running, alarmEnabled;
 
