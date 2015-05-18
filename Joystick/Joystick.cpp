@@ -103,11 +103,6 @@ void JoystickThread::handleYCord(int yCord) {
 void JoystickThread::handleTrigger(int trig) {
     int trigBit;
 
-    if (*shots <= 0) {
-        msg->setText("Magasin tomt!");
-        return;
-    }
-
     if (trig > 900) {
         trigBit = 1;
     }
@@ -116,6 +111,10 @@ void JoystickThread::handleTrigger(int trig) {
     }
 
     if (trigBit == 1 && lastTrig == 0) {
+        if (*shots <= 0) {
+            msg->setText("Magasin tomt!");
+            return;
+        }
         uartQueue->post(protocol.constructString(Protocol::CMD_SHOOT, '0'), 4);
         shotLabel->setNum(--(*shots));
         	
