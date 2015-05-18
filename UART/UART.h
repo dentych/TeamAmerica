@@ -9,7 +9,7 @@
 #include <QThread>
 #include <QMutex>
 #include <QWaitCondition>
-//#include "Log.h"
+#include "../Log/Log.h"
 
 struct UARTItem {
     // Constructor for parsing values when creating the struct object.

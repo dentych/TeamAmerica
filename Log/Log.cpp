@@ -11,7 +11,8 @@ Log::Log()
 	cmdArr[alarm] = "Alarmen blev aktiveret\n";
 	cmdArr[aktiver] = "Systemet blev aktiveret\n";
 	cmdArr[deaktiver] = "Systemet blev deaktiveret\n";
-	cmdArr[uart] = "Der opstod en fejl ved oprettelse af forbindelse til UART\n";
+    cmdArr[uart] = "Der opstod en fejl ved oprettelse af forbindelse til UART\n";
+    cmdArr[advarsel] = "Advarsel blev givet\n";
 }
 
 string Log::timestamp()

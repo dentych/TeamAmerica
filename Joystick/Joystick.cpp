@@ -13,6 +13,8 @@ JoystickThread::JoystickThread(UARTQueue *uartQueue, QLabel *label, int *shots)
     lastX = 0;
     lastY = 0;
     alarmCooldown = 0;
+
+    Log *log = new Log;
 }
 
 void JoystickThread::enableAlarm() {
@@ -115,6 +117,7 @@ void JoystickThread::handleTrigger(int trig) {
     if (trigBit == 1 && lastTrig == 0) {
         uartQueue->post(protocol.constructString(Protocol::CMD_SHOOT, '0'), 4);
         shotLabel->setNum(--(*shots));
+        log->writeLog(Log::skyd);
     }
 
     lastTrig = trigBit;
@@ -128,6 +131,7 @@ void JoystickThread::handleAlarm(int alarm) {
     if (alarm > 800 && !alarmCooldown) {
         alarmCooldown = 20;
         spi->WriteToSpeaker(0);
+        log->writeLog(Log::alarm);
     }
 
     if (alarmCooldown > 0) {
