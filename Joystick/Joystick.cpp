@@ -9,7 +9,7 @@ JoystickThread::JoystickThread(UARTQueue *uartQueue, QLabel *label, int *shots, 
         exit(-1);
     }
     spi = new SensorsSPI("/dev/spidev0.0", SPI_MODE_0, 3000000, 8);
-    alarmEnabled = true;
+    alarmEnabled = false;
     lastX = 0;
     lastY = 0;
     alarmCooldown = 0;
@@ -25,15 +25,26 @@ void JoystickThread::disableAlarm() {
     alarmEnabled = false;
 }
 
+void JoystickThread::enableJoystick() {
+    joystickActive = true;
+}
+
+void JoystickThread::disableJoystick() {
+    joystickActive = false;
+}
+
 void JoystickThread::run() {
     std::cout << "Joystick running!" << std::endl;
     running = true;
 
     while (running) {
         int xCord, yCord, trigger, alarm;
-        xCord = spi->JoystickX();
-        yCord = spi->JoystickY();
-        trigger = spi->JoystickTrig();
+
+        if (joystickActive) {
+            xCord = spi->JoystickX();
+            yCord = spi->JoystickY();
+            trigger = spi->JoystickTrig();
+        }
         if (alarmEnabled) alarm = spi->Pirsensor();
 
         std::cout << "Joystick X: " << xCord << std::endl <<
@@ -41,9 +52,11 @@ void JoystickThread::run() {
                      "Joystick trigger: " << trigger << std::endl <<
                      "Pir sensor: " << alarm << std::endl;
 
-        handleXCord(xCord);
-        handleYCord(yCord);
-        handleTrigger(trigger);
+        if (joystickActive) {
+            handleXCord(xCord);
+            handleYCord(yCord);
+            handleTrigger(trigger);
+        }
         if (alarmEnabled) handleAlarm(alarm);
 
         usleep(100000);
