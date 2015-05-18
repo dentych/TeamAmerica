@@ -165,6 +165,8 @@ void cameraFeed::OnDeaktiverPressed()
 
 void cameraFeed::OnGenladPressed()
 {
+    OnDeaktiverPressed();
+    joystick->disableJoystick();
     Genlad *genlad= new Genlad(keyboard, msg_);
     genlad->setWindowTitle("Genlad");
     genlad->exec();
@@ -172,6 +174,8 @@ void cameraFeed::OnGenladPressed()
     sstat_->setNum(skud_);
 
     this->keyboard->setTarget(this);
+    joystick->enableJoystick();
+    OnAktiverPressed();
 }
 
 void cameraFeed::OnAdvarselPressed()
