@@ -12,7 +12,7 @@ class Genlad : public QDialog
     Q_OBJECT
 
 public:
-    Genlad(MatrixKeyboard *keyboard, QWidget *parent = 0);
+    Genlad(MatrixKeyboard *keyboard, QLabel *msg, QWidget *parent = 0);
     ~Genlad();
 
 protected:
@@ -26,6 +26,7 @@ private:
     QLineEdit *les_;
     QLabel *info_;
     QLabel *antal_;
+    QLabel *msg_;
 
     MatrixKeyboard *keyboard;
 };

@@ -6,7 +6,7 @@
 int skud_ = 0;
 
 Genlad::Genlad(MatrixKeyboard *keyboard, QWidget *parent)
-    : keyboard(keyboard), QDialog(parent)
+    : keyboard(keyboard), msg_(msg), QDialog(parent)
 {
 
     QVBoxLayout *vbox = new QVBoxLayout(this);
@@ -16,7 +16,7 @@ Genlad::Genlad(MatrixKeyboard *keyboard, QWidget *parent)
 
     connect(ok_, SIGNAL(pressed()), this, SLOT(OnOkPressed()));
 
-    info_ = new QLabel("Indtast antal skud og afslut med ok");
+    info_ = new QLabel("Indtast antal skud og afslut med #. * for at slette (annullerer hvis feltet er tomt).");
     antal_= new QLabel("Antal skud: ");
     les_ = new QLineEdit(this);
     les_->setValidator( new QIntValidator(0, 100, this));
@@ -57,6 +57,8 @@ void Genlad::OnOkPressed()
 
     //info_->setText(QString::number(skud_));
 
+    msg_->setText("");
+
     this->close();
 
 }
@@ -67,7 +69,13 @@ void Genlad::keyPressEvent(QKeyEvent *ke) {
         OnOkPressed();
         break;
     case Qt::Key_Asterisk:
-        les_->backspace();
+        if (les_->text().isEmpty())
+        {
+            this->close();
+        }
+        else {
+            les_->backspace();
+        }
         break;
     default:
         les_->insert(ke->text());
