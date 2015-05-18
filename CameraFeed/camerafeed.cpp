@@ -99,6 +99,7 @@ cameraFeed::cameraFeed(UARTQueue *queue, UART *uart, JoystickThread *joystick, M
     // Direct keyboard events here.
 	this->keyboard->setTarget(this);
 
+    joystick->setCameraVars(sstat_, &skud_, msg_);
     joystick->enableJoystick();
     uartQueue->post(protocol.constructString(Protocol::CMD_LASER, '0'), 4);
 }
@@ -238,6 +239,8 @@ void cameraFeed::keyPressEvent(QKeyEvent *k) {
 cameraFeed::~cameraFeed()
 {
     cvReleaseCapture( &capture );
+
+    uartQueue->post(protocol.constructString(Protocol::CMD_LASEROFF, '0'), 4);
 
     file.open("AntalSkud.txt",ios_base::out);
     file << skud_;

@@ -2,7 +2,6 @@
 
 MatrixKeyboard::MatrixKeyboard(QObject *target) : target(target) {
 	std::cout << "Constructing keyboard object." << std::endl;
-	wiringPiSetupGpio();
 
 	// Setup output pins (rows)
 	pinMode(MK1_0, OUTPUT); // Row 1

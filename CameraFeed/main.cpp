@@ -3,15 +3,18 @@
 #include <QWidget>
 #include "login.h"
 #include <iostream>
+#include <wiringSerial.h>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    wiringPiSetupGpio();
+
     UARTQueue *uartQueue = new UARTQueue();
     UART *uart = new UART("/dev/ttyAMA0", 9600, uartQueue);
     uart->start();
-    JoystickThread *joystick = new JoystickThread(uartQueue, sstat_, &skud_, msg_);
+    JoystickThread *joystick = new JoystickThread(uartQueue);
     joystick->start();
 
     Login window(uartQueue, uart, joystick);
@@ -25,7 +28,7 @@ int main(int argc, char *argv[])
     joystick->stop();
     uart->stop();
 
-    uartQueue->post(protocol.constructString(Protocol::CMD_LASEROFF, '0'), 4);
+    uartQueue->post("0", 1);
 
     while (joystick->isRunning()) { /* WAIT TIME */ }
     if (!joystick->isRunning()) delete joystick;

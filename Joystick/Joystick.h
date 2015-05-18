@@ -12,7 +12,8 @@
 
 class JoystickThread : public QThread {
 public:
-    JoystickThread(UARTQueue *uartQueue, QLabel *shotLabel, int *shots, QLabel *msg);
+    JoystickThread(UARTQueue *uartQueue);
+    void setCameraVars(QLabel *shotLabel, int *shots, QLabel *msg);
     void enableAlarm();
     void disableAlarm();
     void enableJoystick();

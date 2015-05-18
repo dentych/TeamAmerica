@@ -2,19 +2,26 @@
 
 int JoystickThread::objectCount = 0;
 
-JoystickThread::JoystickThread(UARTQueue *uartQueue, QLabel *label, int *shots, QLabel *msg)
-    : uartQueue(uartQueue), shotLabel(label), shots(shots), msg(msg) {
+JoystickThread::JoystickThread(UARTQueue *uartQueue)
+    : uartQueue(uartQueue) {
     if (objectCount > 0) {
         std::cout << "FATAL ERROR: Two joystick thread objects have been instantiated!" << std::endl;
         exit(-1);
     }
     spi = new SensorsSPI("/dev/spidev0.0", SPI_MODE_0, 3000000, 8);
     alarmEnabled = false;
+    joystickActive = false;
     lastX = 0;
     lastY = 0;
     alarmCooldown = 0;
 
     log = new Log;
+}
+
+void JoystickThread::setCameraVars(QLabel *shotLabel, int *shots, QLabel *msg) {
+    this->shotLabel = shotLabel;
+    this->shots = shots;
+    this->msg = msg;
 }
 
 void JoystickThread::enableAlarm() {
@@ -47,10 +54,14 @@ void JoystickThread::run() {
         }
         if (alarmEnabled) alarm = spi->Pirsensor();
 
-        std::cout << "Joystick X: " << xCord << std::endl <<
+        if (joystickActive) {
+            std::cout << "Joystick X: " << xCord << std::endl <<
                      "Joystick Y: " << yCord << std::endl <<
-                     "Joystick trigger: " << trigger << std::endl <<
-                     "Pir sensor: " << alarm << std::endl;
+                     "Joystick trigger: " << trigger << std::endl;
+        }
+        if (alarmEnabled) {
+            std::cout << "Pir sensorsetCamera: " << alarm << std::endl;
+        }
 
         if (joystickActive) {
             handleXCord(xCord);
