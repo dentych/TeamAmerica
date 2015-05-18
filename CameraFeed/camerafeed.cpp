@@ -102,7 +102,7 @@ cameraFeed::cameraFeed(MatrixKeyboard *keyboard, QWidget *parent)
     uartQueue = new UARTQueue();
     uart = new UART("/dev/ttyAMA0", 9600, uartQueue);
     uart->start();
-    joystick = new JoystickThread(uartQueue, sstat_, &skud_);
+    joystick = new JoystickThread(uartQueue, sstat_, &skud_, msg_);
     joystick->start();
 
     uartQueue->post(protocol.constructString(Protocol::CMD_LASER, '0'), 4);
