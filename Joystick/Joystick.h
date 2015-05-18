@@ -30,6 +30,7 @@ private:
     SensorsSPI *spi;
     UARTQueue *uartQueue;
     Protocol protocol;
+	Log *log;
     int lastX, lastY, lastTrig;
     int alarmCooldown;
     QLabel *shotLabel;

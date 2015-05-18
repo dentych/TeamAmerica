@@ -14,7 +14,7 @@ JoystickThread::JoystickThread(UARTQueue *uartQueue, QLabel *label, int *shots)
     lastY = 0;
     alarmCooldown = 0;
 
-    Log *log = new Log;
+    log = new Log;
 }
 
 void JoystickThread::enableAlarm() {
