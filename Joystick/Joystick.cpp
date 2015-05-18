@@ -128,14 +128,15 @@ void JoystickThread::stop() {
 }
 
 void JoystickThread::handleAlarm(int alarm) {
-    if (alarm > 800 && !alarmCooldown) {
-        alarmCooldown = 20;
+	int cooldownvalue = 50;
+    if (alarm > 650 && !alarmCooldown) {
+        alarmCooldown = cooldownvalue;
         spi->WriteToSpeaker(0);
         log->writeLog(Log::alarm);
     }
 
     if (alarmCooldown > 0) {
-        if (alarmCooldown == 18) spi->WriteToSpeaker(1);
+        if (alarmCooldown == (cooldownvalue-2)) spi->WriteToSpeaker(1);
         alarmCooldown--;
     }
 }
