@@ -158,6 +158,7 @@ void JoystickThread::handleAlarm(int alarm) {
         alarmCooldown = cooldownvalue;
         spi->WriteToSpeaker(0);
         log->writeLog(Log::alarm);
+        msg->setText("Alarm aktiveret!");
     }
 
     if (alarmCooldown > 0) {
