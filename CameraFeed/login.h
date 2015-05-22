@@ -18,7 +18,7 @@ class Login : public QWidget
     Q_OBJECT
 
 public:
-    Login(MatrixKeyboard *keyboard = NULL, QWidget *parent = 0);
+    Login(UARTQueue *queue, UART *uart, JoystickThread *joystick, MatrixKeyboard *keyboard = NULL, QWidget *parent = 0);
     ~Login();
 private slots:
     void OnLogIndPressed();
@@ -31,6 +31,9 @@ private:
     QLineEdit *le1;
     QString password_;
     QLabel *status_;
+    UARTQueue *uartQueue;
+    UART *uart;
+    JoystickThread *joystick;
     MatrixKeyboard *keyboard;
 };
 

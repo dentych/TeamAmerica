@@ -21,7 +21,7 @@ class cameraFeed : public QWidget
     Q_OBJECT
 
 public:
-    cameraFeed(MatrixKeyboard *keyboard, QWidget *parent = 0);
+    cameraFeed(UARTQueue *queue, UART *uart, JoystickThread *joystick, MatrixKeyboard *keyboard, QWidget *parent = 0);
     ~cameraFeed();
     QImage putImage(const Mat& mat);
 

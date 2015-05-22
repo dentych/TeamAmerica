@@ -6,6 +6,7 @@
 #include <QKeyEvent>
 #include <QApplication>
 #include <QThread>
+#include <wiringSerial.h>
 
 // Rows
 #define MK1_0 4
