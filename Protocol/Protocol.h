@@ -15,7 +15,6 @@ public:
 		CMD_LEFT,
 		CMD_RIGHT,
 		CMD_SHOOT,
-		CMD_RESET,
 		CMD_ALARM,
         CMD_LASER,
         CMD_LASEROFF

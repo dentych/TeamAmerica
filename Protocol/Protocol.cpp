@@ -11,14 +11,13 @@ Protocol::Protocol(){
 	cmdArray[CMD_LEFT] = 'V';
 	cmdArray[CMD_RIGHT] = 'H';
 	cmdArray[CMD_SHOOT] = 'S';
-	cmdArray[CMD_RESET] = 'R';
 	cmdArray[CMD_ALARM] = 'A';
     cmdArray[CMD_LASER] = 'L';
     cmdArray[CMD_LASEROFF] = 'K';
 }
 
 Protocol::~Protocol() {
-	delete cmdArray;
+	delete[] cmdArray;
 }
 
 string Protocol::constructString(CMDS command, char option) {
