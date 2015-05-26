@@ -77,5 +77,5 @@ void UART::send(std::string data, int bytes) {
 		serialPutchar(fd, data[i]);
 		std::cout << data[i];
 	}
-	std::cout << "" << std::endl;
+	std::cout << std::endl;
 }
