@@ -5,7 +5,7 @@ int main() {
 
     UART uart("/dev/ttyAMA0", 9600, &queue);
 
-    while (1) {
-        // LELELELELE
-    }
+    queue.post("string", 6);
+    
+    uart.wait();
 }
