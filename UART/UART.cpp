@@ -72,8 +72,10 @@ void UART::stop() {
 }
 
 void UART::send(std::string data, int bytes) {
-    std::cout << "Sending string over UART!" << std::endl;
+	std::cout << "Sending string over UART: ";
 	for (int i = 0; i < bytes; i++) {
 		serialPutchar(fd, data[i]);
+		std::cout << data[i];
 	}
+	std::cout << "" << std::endl;
 }
