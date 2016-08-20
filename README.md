@@ -7,3 +7,5 @@ In progress:
 
 Need review:
 [![Stories in Need review](https://badge.waffle.io/dentych/TeamAmerica.png?label=Need%20Review&title=Need%20Review)](https://waffle.io/dentych/TeamAmerica)
+
+Link to YouTube video for final product: https://www.youtube.com/watch?v=NNHKfqZbrBQ
